@@ -1,0 +1,72 @@
+def convexHullPoints(points):
+    min, max = findMinMax(points)
+    hullPoints = quickHull(points, min, max)
+    hullPoints = hullPoints + quickHull(points, max, min)
+
+    return hullPoints
+
+def quickHull(points, min, max):
+        left = toLeft(min, max, points)
+        pivot = maxFromLine(min, max, left)
+        if len(pivot) < 1:
+                return [max]
+        hullPoints = quickHull(left, min, pivot)
+        hullPoints = hullPoints + quickHull(left, pivot, max)
+        return hullPoints
+
+def toLeft(start, end, points):
+        left = []
+        for point in points:
+                if isCCW(start, end, point):
+                        left.append(point)
+        return left
+
+def maxFromLine(start, end, points):
+        maxDist = 0
+        maxPoint = []
+        for point in points:
+                if point != start and point != end:
+                        dist = distance(start, end, point)
+                        if dist > maxDist:
+                                maxDist = dist
+                                maxPoint = point
+        return maxPoint
+
+def findMinMax(points):
+        minX = float('inf')
+        maxX = 0
+        minY = 0
+        maxY = 0
+        for x, y in points:
+                if x < minX:
+                        minX = x
+                        minY = y
+                if x > maxX:
+                        maxX = x
+                        maxY = y
+        return [minX, minY], [maxX, maxY]
+
+def distance(start, end, pivot):
+        xStart, yStart = start
+        xEnd, yEnd = end
+        xPivot, yPivot = pivot
+        distance = abs((yEnd - yStart) * xPivot - (xEnd - xStart) * yPivot + xEnd * yStart - yEnd * xStart) / ((yEnd - yStart) ** 2 + (xEnd - xStart) ** 2) ** 0.5
+        return distance
+
+def isCCW(start, end, point):
+        xStart, yStart = start
+        xEnd, yEnd = end
+        xPoint, yPoint = point
+        return (xEnd - xStart) * (yPoint - yStart) > (yEnd - yStart) * (xPoint - xStart)
+
+n=input("Number of points ")
+n=int(n)
+points = []
+for i in range(0,n):
+     x,y=input().split()
+     x=int(x)
+     y=int(y)
+     li = [x,y]
+     points.append(li)
+     hullpoints=convexHullPoints(points)
+print(hullpoints)
