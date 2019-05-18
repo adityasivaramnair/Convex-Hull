@@ -1,0 +1,72 @@
+import numpy as np
+import math
+n=input("Number of points")
+n=int(n)
+arx=[]
+ary=[]
+print("Points")
+for i in range(0,n):
+    x,y=input().split()
+    x=int(x)
+    y=int(y)
+    arx.append(x)
+    ary.append(y)
+    ynum=min(ary)   
+ynumi=ary.index(ynum)
+xnum=arx[ynumi]
+print(xnum)
+print(ynum)
+arx.remove(xnum)
+ary.remove(ynum)
+
+for h in range(0,n):
+    for k in range(0,n-2):
+        ttheta1=math.atan(ary[k]-ynum)/(arx[k]-xnum)
+        ttheta2=math.atan(ary[k+1]-ynum)/(arx[k+1]-xnum)
+        d1=math.degrees(ttheta1)
+        d2=math.degrees(ttheta2)
+        if(d1<0):
+            d1=d1+180
+        elif(d2<0):
+            d2=d2+180
+        if(d1>d2):
+          arx[k+1]=arx[k]+arx[k+1]
+          arx[k]=arx[k+1]-arx[k]
+          arx[k+1]=arx[k+1]-arx[k]
+          ary[k+1]=ary[k]+ary[k+1]
+          ary[k]=ary[k+1]-ary[k]
+          ary[k+1]=ary[k+1]-ary[k]
+arx.insert(0,xnum)
+ary.insert(0,ynum)
+#print(arx)
+#print(ary)
+stack=[]
+stack.append(0)
+stack.append(1)
+print("stack")
+#print(stack)
+#print("rest")
+for g in range(2,n):
+    l=len(stack)
+    v2=stack[l-1]
+    v1=stack[l-2]
+    ar1=[]
+    ar1.append(arx[g]-arx[v1])
+    ar1.append(ary[g]-ary[v1])
+    ar2=[]
+    ar2.append(arx[v2]-arx[v1])
+    ar2.append(ary[v2]-ary[v1])
+    v=np.cross(ar2,ar1)
+    #print("v")
+    #print(ar1)
+    #print(ar2)
+    print(v)
+    if(v>0):
+        stack.append(g)
+    else:
+        stack.pop()
+        stack.append(g)
+    print(stack)
+for f in stack:
+    print("%s %s" % (arx[f],ary[f]))
+       
